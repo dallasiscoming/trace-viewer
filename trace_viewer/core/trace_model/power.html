@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<!--
+Copyright (c) 2015 The Chromium Authors. All rights reserved.
+Use of this source code is governed by a BSD-style license that can be
+found in the LICENSE file.
+-->
+
+<link rel="import" href="/core/trace_model/cpu.html">
+<link rel="import" href="/core/trace_model/process_base.html">
+<link rel="import" href="/base/iteration_helpers.html">
+
+<script>
+'use strict';
+
+/**
+ * @fileoverview Provides the Process class for power measurement.
+ */
+tv.exportTo('tv.c.trace_model', function() {
+  var ProcessBase = tv.c.trace_model.ProcessBase;
+
+  /**
+   * Power represents the model associated with power measurements.
+   * @constructor
+   */
+  function Power(model) {
+    if (model === undefined)
+      throw new Error('model must be provided');
+    ProcessBase.call(this, model);
+  };
+
+  /**
+   * Comparison between kernels is pretty meaningless.
+   */
+  Power.compare = function(x, y) {
+    return 0;
+  };
+
+  Power.prototype = {
+    __proto__: ProcessBase.prototype,
+
+    compareTo: function(that) {
+      return Power.compare(this, that);
+    },
+
+    get userFriendlyName() {
+      return 'Power';
+    },
+
+    get userFriendlyDetails() {
+      return 'Power';
+    },
+
+    get stableId() {
+      return 'Power';
+    },
+
+    shiftTimestampsForward: function(amount) {
+      ProcessBase.prototype.shiftTimestampsForward.call(this, amount);
+      for (var cpuNumber in this.cpus)
+        this.cpus[cpuNumber].shiftTimestampsForward(amount);
+    },
+
+    // TODO(charliea): updateBounds is hard to describe.
+    updateBounds: function() {
+      ProcessBase.prototype.updateBounds.call(this);
+    },
+
+    createSubSlices: function() {
+      ProcessBase.prototype.createSubSlices.call(this);
+      for (var cpuNumber in this.cpus) {
+        var cpu = this.cpus[cpuNumber];
+        cpu.createSubSlices();
+      }
+    },
+
+    addCategoriesToDict: function(categoriesDict) {
+      ProcessBase.prototype.addCategoriesToDict.call(this, categoriesDict);
+      for (var cpuNumber in this.cpus)
+        this.cpus[cpuNumber].addCategoriesToDict(categoriesDict);
+    },
+
+    getSettingsKey: function() {
+      return 'kernel';
+    },
+
+    iterateAllChildEventContainers: function(callback, opt_this) {
+      ProcessBase.prototype.iterateAllChildEventContainers.call(
+          this, callback, opt_this);
+      for (var cpuId in this.cpus)
+        callback.call(opt_this, this.cpus[cpuId]);
+    },
+
+    iterateAllEventsInThisContainer: function(eventTypePredicate,
+                                              callback, opt_this) {
+      ProcessBase.prototype.iterateAllEventsInThisContainer.call(
+          this, eventTypePredicate, callback, opt_this);
+    }
+  };
+
+  return {
+    Kernel: Kernel
+  };
+});
+</script>
