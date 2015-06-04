@@ -221,8 +221,10 @@ tv.exportTo('tv.c.tracks', function() {
 
     appendPowerTrack_: function() {
       var track = new tv.c.tracks.PowerTrack(this.viewport);
-      if (!track.hasVisibleContent)
-        return;
+
+      // TODO(charliea): Just append it for now - worry about optimization later
+      // if (!track.hasVisibleContent)
+      //   return;
       this.appendChild(track);
     },
 
