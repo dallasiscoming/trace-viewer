@@ -186,5 +186,14 @@ tr.b.unittest.testSuite(function() {
     assert.isFalse(s1.equals(s4));
   });
 
+  test('toArray', function() {
+    var samples = [
+      {guid: 1},
+      {guid: 2}
+    ];
+    var selection = new tr.c.Selection(samples);
+
+    assert.deepEqual(selection.toArray(), samples);
+  });
 });
 </script>
