@@ -23,7 +23,7 @@ tr.exportTo('tr.model', function() {
 
   CounterSample.groupByTimestamp = function(samples) {
     var samplesByTimestamp = tr.b.group(samples, function(sample) {
-      return sample.timestamp;
+        return sample.timestamp;
     });
 
     var timestamps = tr.b.dictionaryKeys(samplesByTimestamp);
