@@ -87,26 +87,16 @@ tr.exportTo('tr.model', function() {
         callback.call(opt_this, this.threads[id]);
     },
 
-    // TODO(charliea): This method differs from every other type that allows
-    // counters, which is definitely a code smell. However, we need some way
-    // to specify the type of counter to add.
     /**
-     * Adds the specified counter to the device.
+     * @return {Counter} The counter on this process named 'name',
+     * creating it if it doesn't exist.
      */
-    addCounter: function(counter) {
-      if (this.counters_[counter.id]) {
-        throw new Error('Counter with the same ID already exists.');
-      }
-      this.counters_[counter.id] = counter;
+    getOrCreateCounter: function(cat, name) {
+      var id = cat + '.' + name;
+      if (!this.counters[id])
+        this.counters[id] = new Counter(this, id, cat, name);
+      return this.counters[id];
     },
-
-    /**
-     * Returns the counter with the specified ID.
-     */
-    getCounter: function(id) {
-      return this.counters_[id];
-    }
-
   };
 
   return {
