@@ -29,6 +29,7 @@ tr.exportTo('tr.model', function() {
     tr.model.EventContainer.call(this);
 
     this.bounds = new tr.b.Range();
+    this.counters = {};
     this.guid = tr.b.GUID.allocate();
   };
 
@@ -59,10 +60,6 @@ tr.exportTo('tr.model', function() {
       return 'device';
     },
 
-    get counters() {
-      return {};
-    },
-
     updateBounds: function() {
       this.bounds.reset();
       // TODO(charliea): Update and add bounds for all children counters
@@ -73,7 +70,8 @@ tr.exportTo('tr.model', function() {
     },
 
     addCategoriesToDict: function(categoriesDict) {
-      // TODO(charliea): Add categories for all counters to dictionary
+      for (var id in this.counters)
+        categoriesDict[this.counters[id].category] = true
     },
 
     iterateAllEventsInThisContainer: function(eventTypePredicate,
@@ -81,8 +79,30 @@ tr.exportTo('tr.model', function() {
     },
 
     iterateAllChildEventContainers: function(callback, opt_this) {
-      // TODO(charliea): Call callback on all child counters
+      for (var id in this.counters)
+        callback.call(opt_this, this.threads[id]);
+    },
+
+    // TODO(charliea): This method differs from every other type that allows
+    // counters, which is definitely a code smell. However, we need some way
+    // to specify the type of counter to add.
+    /**
+     * Adds the specified counter to the device.
+     */
+    addCounter: function(counter) {
+      if (this.counters[counter.id]) {
+        throw new Error('Counter with the same ID already exists.');
+      }
+      this.counters[counter.id] = counter;
+    },
+
+    /**
+     * Returns the counter with the specified ID.
+     */
+    getCounter: function(id) {
+      return this.counters[id];
     }
+
   };
 
   return {

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<!--
+Copyright (c) 2015 The Chromium Authors. All rights reserved.
+Use of this source code is governed by a BSD-style license that can be
+found in the LICENSE file.
+-->
+
+<link rel="import" href="/model/model.html">
+<link rel="import" href="/model/kernel.html">
+
+<script>
+'use strict';
+
+tr.b.unittest.testSuite(function() {
+
+  var Counter = tr.model.Counter;
+  var Device = tr.model.Device;
+  var Model = tr.Model;
+
+  test('updateBounds', function() {
+    // TODO(charliea): Write this function
+  });
+
+  test('shiftTimestampsForward', function() {
+    // TODO(charliea): Write this function
+  });
+
+  test('addCategoriesToDict', function() {
+    // TODO(charliea): Write this function
+  });
+
+  test('iterateAllChildEventContainers', function() {
+    // TODO(charliea): Write this function
+  });
+
+  test('addAndGetCounter', function() {
+    // TODO(charliea): Write this function
+    var device = new Device(new Model())
+    var ctr1 = new Counter(device, 'cat1', 'cat', '1');
+    device.addCounter(ctr1);
+
+    assert.isNotNull(device.getCounter('cat1'));
+  });
+
+  test('getCounter', function() {
+    // TODO(charliea): Write this function
+  });
+});
+</script>
+
