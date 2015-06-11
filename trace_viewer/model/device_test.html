@@ -33,17 +33,18 @@ tr.b.unittest.testSuite(function() {
     // TODO(charliea): Write this function
   });
 
-  test('addAndGetCounter', function() {
-    // TODO(charliea): Write this function
-    var device = new Device(new Model())
-    var ctr1 = new Counter(device, 'cat1', 'cat', '1');
-    device.addCounter(ctr1);
+  test('getOrCreateCounter', function() {
+    var device = new Device(new Model());
+    var ctr1 = device.getOrCreateCounter('cat1', 'name1');
+    var ctr2 = device.getOrCreateCounter('cat1', 'name2');
+    var ctr3 = device.getOrCreateCounter('cat2', 'name1');
 
-    assert.isNotNull(device.getCounter('cat1'));
-  });
-
-  test('getCounter', function() {
-    // TODO(charliea): Write this function
+    var expected = {
+      'cat1.name1': ctr1,
+      'cat1.name2': ctr2,
+      'cat2.name1': ctr3
+    };
+    assert.deepEqual(device.counters, expected);
   });
 });
 </script>

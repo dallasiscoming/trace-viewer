@@ -7,6 +7,7 @@ found in the LICENSE file.
 
 <link rel="import" href="/base/guid.html">
 <link rel="import" href="/base/range.html">
+<link rel="import" href="/model/counter.html">
 <link rel="import" href="/model/event_container.html">
 
 <script>
@@ -16,6 +17,8 @@ found in the LICENSE file.
  * @fileoverview Provides the Device class.
  */
 tr.exportTo('tr.model', function() {
+
+  var Counter = tr.model.Counter;
 
   /**
    * Device represents the device-level objects in the model.
@@ -57,7 +60,7 @@ tr.exportTo('tr.model', function() {
     },
 
     get counters() {
-      throw new Error('failure!');
+      return this.counters_;
     },
 
     getSettingsKey: function() {
@@ -75,7 +78,7 @@ tr.exportTo('tr.model', function() {
 
     addCategoriesToDict: function(categoriesDict) {
       for (var id in this.counters_)
-        categoriesDict[this.counters[id].category] = true
+        categoriesDict[this.counters[id].category] = true;
     },
 
     iterateAllEventsInThisContainer: function(eventTypePredicate,
@@ -84,19 +87,19 @@ tr.exportTo('tr.model', function() {
 
     iterateAllChildEventContainers: function(callback, opt_this) {
       for (var id in this.counters_)
-        callback.call(opt_this, this.threads[id]);
+        callback.call(opt_this, this.counters[id]);
     },
 
     /**
-     * @return {Counter} The counter on this process named 'name',
-     * creating it if it doesn't exist.
+     * @return {Counter} The counter on this device named 'name', creating it if
+     * it doesn't exist.
      */
     getOrCreateCounter: function(cat, name) {
       var id = cat + '.' + name;
       if (!this.counters[id])
         this.counters[id] = new Counter(this, id, cat, name);
       return this.counters[id];
-    },
+    }
   };
 
   return {
