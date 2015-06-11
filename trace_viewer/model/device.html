@@ -29,7 +29,7 @@ tr.exportTo('tr.model', function() {
     tr.model.EventContainer.call(this);
 
     this.bounds = new tr.b.Range();
-    this.counters = {};
+    this.counters_ = {};
     this.guid = tr.b.GUID.allocate();
   };
 
@@ -56,6 +56,10 @@ tr.exportTo('tr.model', function() {
       return 'Device';
     },
 
+    get counters() {
+      throw new Error('failure!');
+    },
+
     getSettingsKey: function() {
       return 'device';
     },
@@ -70,7 +74,7 @@ tr.exportTo('tr.model', function() {
     },
 
     addCategoriesToDict: function(categoriesDict) {
-      for (var id in this.counters)
+      for (var id in this.counters_)
         categoriesDict[this.counters[id].category] = true
     },
 
@@ -79,7 +83,7 @@ tr.exportTo('tr.model', function() {
     },
 
     iterateAllChildEventContainers: function(callback, opt_this) {
-      for (var id in this.counters)
+      for (var id in this.counters_)
         callback.call(opt_this, this.threads[id]);
     },
 
@@ -90,17 +94,17 @@ tr.exportTo('tr.model', function() {
      * Adds the specified counter to the device.
      */
     addCounter: function(counter) {
-      if (this.counters[counter.id]) {
+      if (this.counters_[counter.id]) {
         throw new Error('Counter with the same ID already exists.');
       }
-      this.counters[counter.id] = counter;
+      this.counters_[counter.id] = counter;
     },
 
     /**
      * Returns the counter with the specified ID.
      */
     getCounter: function(id) {
-      return this.counters[id];
+      return this.counters_[id];
     }
 
   };
