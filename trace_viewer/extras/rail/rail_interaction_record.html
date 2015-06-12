@@ -20,7 +20,7 @@ found in the LICENSE file.
 tr.exportTo('tr.e.rail', function() {
 
   function RAILInteractionRecord(title, railTypeName, start, duration) {
-    var colorId = tr.b.ui.getColorIdForReservedName(railTypeName);
+    var colorId = tr.ui.b.getColorIdForReservedName(railTypeName);
     this.railTypeName_ = railTypeName;
     tr.model.InteractionRecord.call(this,
                                     title, colorId, start, duration);
@@ -61,9 +61,15 @@ tr.exportTo('tr.e.rail', function() {
      *  1 means a perfect user experience.
      */
     get railScore() {
-      // TODO(benjhayden, nduca) Better scoring algorithm.
       var happiness = 1 - this.normalizedUserPain;
-      return this.normalizedEfficiency * happiness;
+      var efficiency = this.normalizedEfficiency;
+      // The lower sub-score is more important than the higher sub-score.
+      // happiness is more important than efficiency.
+      var happinessWeight = 2 * Math.exp(1 - happiness);
+      var efficiencyWeight = Math.exp(1 - efficiency);
+      // This function is graphed at http://goo.gl/XMWUKA
+      return ((happiness * happinessWeight + efficiency * efficiencyWeight) /
+              (happinessWeight + efficiencyWeight));
     },
 
     /**
