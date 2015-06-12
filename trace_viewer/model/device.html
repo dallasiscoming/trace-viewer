@@ -69,11 +69,17 @@ tr.exportTo('tr.model', function() {
 
     updateBounds: function() {
       this.bounds.reset();
-      // TODO(charliea): Update and add bounds for all children counters
+
+      this.iterateAllChildEventContainers(function(child) {
+        child.updateBounds();
+        this.bounds.addRange(child.bounds);
+      }, this); 
     },
 
     shiftTimestampsForward: function(amount) {
-      // TODO(charliea): Shift timestamps for all children
+      this.iterateAllChildEventContainers(function(child) {
+        child.shiftTimestampsForward(amount);
+      });
     },
 
     addCategoriesToDict: function(categoriesDict) {
